@@ -4,14 +4,8 @@ import java.util.*;
 public class matrix {
 	Scanner input = new Scanner(System.in);
    	private int order, j=0, k=0; 
-	private double mtrix[][];
-	private double mtrixClone[][];
-	private double nmOne[][];
-	private double transpose[][];
-	private double adjugate[][];
-	private double inverse[][];
-	private double product[][];
-	private double scalar_product[][];
+	private double mtrix[][], mtrixClone[][], nmOne[][], transpose[][], adjugate[][];
+	private double inverse[][], product[][], scalar_product[][];
 	 
 	matrix(int order){
 	mtrix = new double[order][order];
@@ -136,9 +130,8 @@ public class matrix {
 	 }
 	 public double find2by2() {
 			
-		 if(order ==1)
-				return mtrix[0][0];
-				return mtrix[0][0]*mtrix[1][1]-mtrix[1][0]*mtrix[0][1];
+		 if(order ==1) return mtrix[0][0];
+		return mtrix[0][0]*mtrix[1][1]-mtrix[1][0]*mtrix[0][1];
 		
 	 }
 	 
@@ -170,17 +163,6 @@ public class matrix {
 			for(int b=0; b<order; b++){
 			inverse[c][b] /=detA;}}	 
 		return inverse;
-	 }
-	 public double[][] times(matrix B){
-		 product = new double[this.order()][this.order];
-		 
-		 for(int a = 0; a<this.order(); a++) {
-			 for(int b = 0; b<this.order(); b++) {
-				 product[a][b] = this.get(a,b) * B.get(b,a);
-		 
-		 
-			 }}
-		 return product;
 	 }
 	 
 	 public static void console() {
@@ -228,7 +210,7 @@ public class matrix {
 		public static void main(String[] args) {
 			new theGUI();
 
-			console();
+// 			console();
 
 			
 	} 
