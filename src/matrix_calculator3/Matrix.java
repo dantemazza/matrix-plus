@@ -11,7 +11,8 @@ public class Matrix {
 	Scanner input = new Scanner(System.in);
 	Vector rowSpace[], columnSpace[], eigenVectors[];
 	Vector arithmeticVector = new Vector();
-	private double eigenValues[], eigenspaceBasis;
+	private Object eigenValues[];
+	private double eigenspaceBasis;
 	//Matrix arithmeticMatrix = new Matrix();
 	
 	Matrix(){}
@@ -382,26 +383,52 @@ public class Matrix {
 	 
 	 
 	 public void findEigenvalues(){
-		 eigenValues = new double[order];
+		 eigenValues = new Object[order];
 		 this.generateSchurForm();
+		 this.schur.zeroify();
+		 this.schur.print();
 		 diag = new Matrix(order);
-		 for(int a = 0; a<order; a++) {
-			 for(int b = 0; b<order; b++) {
-				 if(a == b) { eigenValues[a] = this.schur.get(a, b);
-				 diag.set(a, b, eigenValues[a]);
-				 }else diag.set(a, b, 0);
+//		 for(int a = 0; a<order; a++) {
+//			 for(int b = 0; b<order; b++) {
+//				 if(a == b) { 
+//					 eigenValues[a] = this.schur.get(a, b);
+//				     diag.set(a, b, eigenValues[a]);
+//				 }else diag.set(a, b, 0);
+//			 }
+//		 }
+		 
+		 int a=0, b=0;
+		 while(a<order) { 
+			 if(a == order-1){
+				 eigenValues[a] = this.schur.get(a, b);
+				 a++; b++; continue;
+			 }
+			 if(this.schur.get(a+1, b) == 0) {
+				 eigenValues[a] = this.schur.get(a, b);
+				 a++; b++; continue;
+			 }else{
+				 Object roots[] = solveQuadraticEquation(1, -this.schur.get(a, b) -this.schur.get(a+1, b+1), 
+				 this.schur.get(a, b)*this.schur.get(a+1, b+1) - this.schur.get(a+1, b)*this.schur.get(a, b+1));
+				 eigenValues[a] = roots[0];
+				 eigenValues[a+1] = roots[1];
+				 a+=2; b+=2;
 			 }
 		 }
+		 
+		 
+		 
+		 
 	 }
 	 
-	 public double[] getEigenValues(){
+	 public Object[] getEigenValues(){
 		 return eigenValues;
 	 }
 	 
 	 public void printEigenValues() {
 		 System.out.println("All " + order + " eigenvalues:");
 		 for(int a=0; a<order; a++) {
-			 System.out.println(eigenValues[a]);
+			 if(eigenValues[a] instanceof Complex) System.out.println(((Complex)eigenValues[a]).print());
+			 else System.out.println(eigenValues[a]);
 		 }
 	 }
 	 
@@ -417,7 +444,7 @@ public class Matrix {
 	 public void findBasisForEigenspace() {
 		 for(int a=0; a<order; a++) {
 			 Matrix AminusLambdaI = new Matrix(this);
-			 Matrix lambdaI = new Matrix(this.identity().scalarProduct(eigenValues[a]));
+			 Matrix lambdaI = new Matrix(this.identity().scalarProduct((double)eigenValues[a]));
 			 AminusLambdaI.subtract(lambdaI);
 			 AminusLambdaI.setDet();
 			 System.out.println("determinant: " + AminusLambdaI.getDet());		 
@@ -435,6 +462,31 @@ public class Matrix {
 		 return identity;
 	 }
 	 
+	 public void zeroify() {
+		 for(int a=0; a<order; a++) {
+			 for(int b=0; b<order; b++) {
+				 if(matrix[a][b] < 0.0001 && matrix[a][b] > -0.0001) {
+					 matrix[a][b] = 0;
+				 }}}
+	 }
+	 
+	 public static Object[] solveQuadraticEquation(double a, double b, double c) {
+		 Object roots[] = new Object[2];
+		 double b2a, discriminant;
+		 b2a = -b / (2*a);
+		 discriminant = Math.pow(b, 2) - 4*a*c;
+		 if(discriminant < 0) {
+			 roots[0] = new Complex(b2a, Math.sqrt(Math.abs(discriminant)) / (2*a));
+			 roots[1] = new Complex(b2a, Math.sqrt(Math.abs(discriminant)) / (-2*a));
+			 return roots;
+		 }
+		 
+		 roots[0] = new Double(b2a - Math.sqrt(discriminant) / (2*a));
+		 roots[1] = new Double(b2a + Math.sqrt(discriminant) / (2*a));
+		 return roots;
+	 }
+	 
+	 
 		public static void main(String[] args) {
 			//console();
 			
@@ -444,7 +496,6 @@ public class Matrix {
 //			Vector v4 = new Vector(v2.length, v2);
 //			
 //			Vector.subtract(v3, v4).print();
-			
 			Matrix A = new Matrix(3);
      		A.generate(-10,10);
 			
@@ -459,8 +510,8 @@ public class Matrix {
 			A.findEigenvalues();
 			A.printEigenValues();
 			A.getSchurForm().print();
-			A.findBasisForEigenspace();
-			A.diag.print();
+//			A.findBasisForEigenspace();
+//			A.diag.print();
 //			System.out.println("Trace2: " + A.diag.getTrace());
 			
 			//A.setDet();
@@ -480,6 +531,7 @@ public class Matrix {
 			
 			
 		}
+		
 		
 		
 		
