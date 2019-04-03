@@ -13,7 +13,6 @@ public class Matrix {
 	Vector arithmeticVector = new Vector();
 	private Object eigenValues[];
 	private double eigenspaceBasis;
-	//Matrix arithmeticMatrix = new Matrix();
 	
 	Matrix(){}
 	
@@ -68,7 +67,7 @@ public class Matrix {
 //					System.out.print(0 + " ");
 //					continue;
 //				}
-			System.out.print(matrix[c][b] + " ");
+			System.out.print(String.format("%.2f",matrix[c][b]) + " ");
 			}}
 		System.out.println();
 	}
@@ -192,6 +191,13 @@ public class Matrix {
 	 public Matrix getInverse() {
 		 return inverse; 
 	 }
+	 
+	 public void establish() {
+		 this.setDet();
+		 this.setTranspose();
+		 this.setAdjugate();
+		 this.setInverse();
+	 }
 	 public static void console() {
 			Scanner input = new Scanner(System.in);
 			while(true){
@@ -305,7 +311,6 @@ public class Matrix {
 		 orthogonal = new Matrix(this);
 		 
 		 orthogonal.columnSpace[0].normalize();
-//		 System.out.println("magnitude of " + 0 + " " + orthogonal.columnSpace[0].magnitude);
 		 for(int u=1; u<this.order; u++) {
 			 for(int v = u; v>=0; v--){
 				 Vector temp = new Vector(orthogonal.columnSpace[v]);
@@ -313,13 +318,8 @@ public class Matrix {
 				 orthogonal.columnSpace[u].subtract(temp);
 			 }
 			 orthogonal.columnSpace[u].normalize();
-//			 System.out.println("magnitude of " + u + " " + orthogonal.columnSpace[u].magnitude);
 		 }
 		orthogonal.mergeCols(orthogonal.columnSpace);
-//		System.out.println(orthogonal.columnSpace[1].dot(orthogonal.columnSpace[0]));
-//		System.out.println(orthogonal.columnSpace[2].dot(orthogonal.columnSpace[0]));
-//		System.out.println(orthogonal.columnSpace[2].dot(orthogonal.columnSpace[1]));
-
 		 
 	 }
 	 
@@ -336,11 +336,9 @@ public class Matrix {
 	 }
 	 
 	 public void mergeCols(Vector[] cols) {
-		 //this.print();
 		 for(int v=0; v<order; v++) {
 			 for(int w=0; w<order; w++) {
 				 this.set(w,v, cols[v].get(w));
-				 //this.print();
 			 }
 		 }
 	 }
@@ -368,11 +366,7 @@ public class Matrix {
 
 			 Matrix AkPlus = new Matrix(Ak.getR());
 			 AkPlus.times(Ak.getQ());
-//			 System.out.println("Ak b4: ");
-//			 Ak.print();
 			 Ak = new Matrix(AkPlus);
-//			 System.out.println("Ak after: ");
-//			 Ak.print();
 		 }
 		 schur = new Matrix(Ak);
 	 }
@@ -386,16 +380,7 @@ public class Matrix {
 		 eigenValues = new Object[order];
 		 this.generateSchurForm();
 		 this.schur.zeroify();
-		 this.schur.print();
 		 diag = new Matrix(order);
-//		 for(int a = 0; a<order; a++) {
-//			 for(int b = 0; b<order; b++) {
-//				 if(a == b) { 
-//					 eigenValues[a] = this.schur.get(a, b);
-//				     diag.set(a, b, eigenValues[a]);
-//				 }else diag.set(a, b, 0);
-//			 }
-//		 }
 		 
 		 int a=0, b=0;
 		 while(a<order) { 
@@ -428,7 +413,7 @@ public class Matrix {
 		 System.out.println("All " + order + " eigenvalues:");
 		 for(int a=0; a<order; a++) {
 			 if(eigenValues[a] instanceof Complex) System.out.println(((Complex)eigenValues[a]).print());
-			 else System.out.println(eigenValues[a]);
+			 else System.out.println(String.format("%.2f",eigenValues[a]));
 		 }
 	 }
 	 
@@ -490,44 +475,13 @@ public class Matrix {
 		public static void main(String[] args) {
 			//console();
 			
-//			double v1[] = new double[]{1,2,3};
-//			Vector v3 = new Vector(v1.length,v1);
-//			double v2[] = new double[]{-3,0,1};
-//			Vector v4 = new Vector(v2.length, v2);
-//			
-//			Vector.subtract(v3, v4).print();
-			Matrix A = new Matrix(3);
+			Matrix A = new Matrix(50);
      		A.generate(-10,10);
-			
-//			Matrix B = new Matrix(3);
-//			A.initialize();
 			A.print();
-//			B.print();
-//			A.times(B);
-//			A.decomposeQR();
-			
-//			System.out.println("Trace1: " + A.getTrace());
-			A.findEigenvalues();
+//			A.initialize();
+     		
+     		A.findEigenvalues();
 			A.printEigenValues();
-			A.getSchurForm().print();
-//			A.findBasisForEigenspace();
-//			A.diag.print();
-//			System.out.println("Trace2: " + A.diag.getTrace());
-			
-			//A.setDet();
-			//System.out.println("Determinant: " + A.determinant);
-//			A.generateSchurForm();
-//			A.getSchurForm().print();
-//			A.decomposeQR();
-//			System.out.println("Q");
-//			A.getQ().print();
-//			System.out.println("R");
-//			A.getR().print();
-			
-			
-//			Matrix P = new Matrix(A.getQ());
-//			P.times(A.getR());
-//			P.print();
 			
 			
 		}
