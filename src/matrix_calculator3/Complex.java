@@ -9,17 +9,20 @@ public class Complex {
 	}
 	
 	public String print() {
-		num = Double.toString(x) + " + ";
+		num = String.format("%.2f",x);
+		if(y<0) { num += " + ";
+		}else { num += " - ";}
+		
 		if(y == 1) {
 			num += "j";
 			return num;
 		}
 		if(y == -1) {
-			num += "-j";
+			num += "j";
 			return num;
 		}
-		num += Double.toString(y) + "j";
+		if(y<0) { num += String.format("%.2f", -y) + "j";
+		}else {num += String.format("%.2f", y) + "j";}
 		return num;
 	}
-	
 }
