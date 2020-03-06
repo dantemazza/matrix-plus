@@ -1,4 +1,4 @@
-# matrix-calculator
+# matrix-plus
 
 ## matrix_calculator2 (GUI):
 Calculates the determinant, adjugate and inverse of n x n real matrices. The program implements the Laplace/cofactor expansion algorithm for finding determinants recursively and completes operations on square matrices of up to order 9 in &lt;6 seconds. Laplace expansion is infeasible for larger matrices as it is of factorial time complexity, so order 9 is the upper limit to which you would use this calculator in any practical sense.
